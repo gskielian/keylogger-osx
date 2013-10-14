@@ -44,11 +44,17 @@ CGEventRef myCGEventCallback (CGEventTapProxy proxy, CGEventType type, CGEventRe
     struct tm *time_info = localtime(&currentTime);
     
     char fmtTime[32];
-    strftime(fmtTime, 32, "%F %T", time_info);
+    strftime(fmtTime, 32, "%F %T %s", time_info);
     
-    fprintf(logFile, "%s %s\n", fmtTime, keyCodeToReadableString(keyCode));
+
+//    changed this line because we needn't record the keystrokes -- just keyevents
+//    fprintf(logFile, "%s %s\n", fmtTime, keyCodeToReadableString(keyCode));
+    fprintf(logFile, "%s \n", fmtTime);
     
-    if (counter % 100 == 0) fflush(logFile);
+    if (counter >= 1) {
+      fflush(logFile);
+      counter=0;
+    }
   }
   return event;
 }
